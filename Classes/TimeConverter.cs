@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using BerlinClock.Classes;
 
@@ -12,11 +10,6 @@ namespace BerlinClock
     /// <seealso cref="BerlinClock.ITimeConverter" />
     public class TimeConverter : ITimeConverter
     {
-        // we can inject the values in the ctor to allow a more extendable implementation
-        private const char Yellow = 'Y';
-        private const char Off = 'O';
-        private const char Red = 'R';
-
         /// <summary>
         /// Converts the time.
         /// </summary>
@@ -47,7 +40,7 @@ namespace BerlinClock
         public string SecondsRow(TimeOfDay time)
         {
             if (time == null) throw new ArgumentNullException("time");
-            return time.Seconds % 2 == 0 ? Yellow.ToString() : Off.ToString();
+            return time.Seconds % 2 == 0 ? "Y" : "O";
         }
 
         /// <summary>
@@ -61,10 +54,8 @@ namespace BerlinClock
         {
             if (time == null) throw new ArgumentNullException("time");
 
-            const int totalLamps = 4;
             var onLamps = time.Hours / 5;
-
-            return CreateLamps(totalLamps, onLamps, Red);
+            return CreateRowLamps(onLamps, "RRRR");
         }
 
         /// <summary>
@@ -78,10 +69,8 @@ namespace BerlinClock
         {
             if (time == null) throw new ArgumentNullException("time");
 
-            const int totalLamps = 4;
             var onLamps = time.Hours % 5;
-
-            return CreateLamps(totalLamps, onLamps, Red);
+            return CreateRowLamps(onLamps, "RRRR");
         }
 
         /// <summary>
@@ -95,17 +84,8 @@ namespace BerlinClock
         {
             if (time == null) throw new ArgumentNullException("time");
 
-            const int totalLamps = 11;
             var noOfOnLamps = time.Minutes / 5;
-            var onLamps = new char[noOfOnLamps];
-            
-            // every third lamp will light up red so we need to start from 1
-            for (var i = 1; i <= noOfOnLamps; i++)
-            {
-                onLamps[i - 1] = i % 3 == 0 ? Red : Yellow;
-            }
-
-            return new string(onLamps) + new string(Off, totalLamps - noOfOnLamps);
+            return CreateRowLamps(noOfOnLamps, "YYRYYRYYRYY");
         }
 
         /// <summary>
@@ -119,22 +99,19 @@ namespace BerlinClock
         {
             if (time == null) throw new ArgumentNullException("time");
 
-            const int totalLamps = 4;
             var onLamps = time.Minutes % 5;
-
-            return CreateLamps(totalLamps, onLamps, Yellow);
+            return CreateRowLamps(onLamps, "YYYY");
         }
 
         /// <summary>
-        /// Creates a row with the given total number of lamps and lights the first noOfOnLamps with the given onValue.
+        /// Creates a row of lamps starting with the first noOfOnLamps from the rowWithAllLampsOn and then continuing with off 'O'.
         /// </summary>
-        /// <param name="total">The total.</param>
         /// <param name="noOfOnLamps">The on lamps.</param>
-        /// <param name="onValue">The on value.</param>
+        /// <param name="rowWithAllLampsOn">The row with all lamps on.</param>
         /// <returns></returns>
-        private string CreateLamps(int total, int noOfOnLamps, char onValue)
+        private static string CreateRowLamps(int noOfOnLamps, string rowWithAllLampsOn)
         {
-            return new string(onValue, noOfOnLamps) + new string(Off, total - noOfOnLamps);
+            return rowWithAllLampsOn.Substring(0, noOfOnLamps) + new string('O', rowWithAllLampsOn.Length - noOfOnLamps);
         }
     }
 }
