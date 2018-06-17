@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BerlinClock.Classes;
+﻿using BerlinClock.Classes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BerlinClock.Tests
@@ -16,9 +11,6 @@ namespace BerlinClock.Tests
     {
         #region Fields
 
-        private const string Yellow = "Y";
-        private const string Off = "O";
-        private const string Red = "R";
         private readonly TimeConverter _timeConverter = new TimeConverter();
 
         #endregion
@@ -28,19 +20,19 @@ namespace BerlinClock.Tests
         [TestMethod]
         public void SecondsRow_SecondsIsEven_RetrunsYellow()
         {
-            Assert.AreEqual(Yellow, _timeConverter.SecondsRow(new TimeOfDay(0, 0, 2)));
+            Assert.AreEqual("Y", _timeConverter.SecondsRow(new TimeOfDay(0, 0, 2)));
         }
 
         [TestMethod]
         public void SecondsRow_SecondsIsZero_RetrunsYellow()
         {
-            Assert.AreEqual(Yellow, _timeConverter.SecondsRow(new TimeOfDay(0, 0, 0)));
+            Assert.AreEqual("Y", _timeConverter.SecondsRow(new TimeOfDay(0, 0, 0)));
         }
 
         [TestMethod]
         public void SecondsRow_SecondsIsOdd_RetrunsOff()
         {
-            Assert.AreEqual(Off, _timeConverter.SecondsRow(new TimeOfDay(0, 0, 1)));
+            Assert.AreEqual("O", _timeConverter.SecondsRow(new TimeOfDay(0, 0, 1)));
         }
 
         #endregion
